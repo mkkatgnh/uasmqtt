@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">AircamQC</string>
+    <string name="action_settings"></string>
+    <string name="mqtt_broker_url_label">MQTT Broker URL</string>
+    <string name="connect_mqtt_broker_button">connect</string>
+    <string name="set_altitude_level_to_zero_label">Set Alt. to zero</string>
+    <string name="set_altitude_level_to_zero_button">set zero</string>
+    <string name="default_uri_of_broker">tcp://192.168.178.21:1883</string>
+    <string name="disconnect_mqtt_broker_button">disconnect</string>
+    <!-- <string name="default_uri_of_broker">tcp://192.168.43.187:1883</string> -->
+
+    
+</resources>
