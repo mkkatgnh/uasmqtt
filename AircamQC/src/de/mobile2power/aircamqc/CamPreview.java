@@ -6,11 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import android.app.Activity;
-import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
@@ -32,7 +30,7 @@ class CamPreview extends SurfaceView implements SurfaceHolder.Callback {
 	private long takePictureCallbackInactiveTimestamp = 0l;
 	private String pictureFolder = null;
 	private Activity parentActivity;
-	private AttitudeAndPosition attitudePosition;
+	private CamPosAndView attitudePosition;
 
 	CamPreview(Activity context) {
 		super(context);
@@ -205,4 +203,13 @@ class CamPreview extends SurfaceView implements SurfaceHolder.Callback {
 	public void setPictureFolder(String pictureFolder) {
 		this.pictureFolder = pictureFolder;
 	}
+	
+	double getVerticalViewAngle() {
+		return camera.getParameters().getVerticalViewAngle();
+	}
+	
+	double getHorizontalViewAngle() {
+		return camera.getParameters().getHorizontalViewAngle();
+	}
+
 }

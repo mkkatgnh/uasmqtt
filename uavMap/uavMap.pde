@@ -15,7 +15,7 @@ Gson gson;
 final static String MQTT_BROKER_IP = "127.0.0.1";
 String hostId;
 
-AttitudeAndPosition uasPos;
+CamPosAndView uasPos;
 
 Location currentLocation = new Location(54.5f, 8.0f);
 
@@ -30,9 +30,9 @@ public void setup() {
   }
 
   gson = new Gson();
-  uasPos = new AttitudeAndPosition();
+  uasPos = new CamPosAndView();
 
-  //  AttitudeAndPosition obj = new AttitudeAndPosition();
+  //  CamPosAndView obj = new AttitudeAndPosition();
   //  String json = gson.toJson(obj);
   //  System.out.println(json);
 
@@ -79,6 +79,6 @@ public void draw() {
 
 void mqttCallback(MQTTPublish msg) {
   String payload = new String(msg.getPayload());
-  uasPos = gson.fromJson(payload, AttitudeAndPosition.class);
+  uasPos = gson.fromJson(payload, CamPosAndView.class);
 }
 
