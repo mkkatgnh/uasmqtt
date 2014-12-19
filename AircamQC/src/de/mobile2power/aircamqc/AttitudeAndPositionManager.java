@@ -12,7 +12,7 @@ import de.mobile2power.aircamqc.gps.GPSManager;
 public class AttitudeAndPositionManager implements GPSCallback, SensorEventListener {
 
 	private GPSManager gpsManager;
-	private AttitudeAndPosition attitudePosition = new AttitudeAndPosition();
+	private CamPosAndView attitudePosition = new CamPosAndView();
 	private Location location;
     private float pressure_value = 0.0f;
     private float height = 0.0f;
@@ -77,7 +77,7 @@ public class AttitudeAndPositionManager implements GPSCallback, SensorEventListe
 		}
 	}
 
-	public AttitudeAndPosition getAttitudePosition() {
+	public CamPosAndView getAttitudePosition() {
 		return attitudePosition;
 	}
 

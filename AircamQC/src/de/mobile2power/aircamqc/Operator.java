@@ -20,7 +20,7 @@ public class Operator implements MqttCallback {
 	private long timeFps = 100; // 10 per seconds
 	private AttitudeAndPositionManager posManager = new AttitudeAndPositionManager();
 	private ConnectorMQTT connectorMQTT = new ConnectorMQTT();
-	private AttitudeAndPosition attitudePosition;
+	private CamPosAndView attitudePosition;
 	private Sender sender;
 	private Gson gson = new Gson();
 	private String json;
@@ -58,6 +58,8 @@ public class Operator implements MqttCallback {
 			time1fps = currentTime;
 			// send periodly
 			attitudePosition = posManager.getAttitudePosition();
+			attitudePosition.setAngh(camPreview.getHorizontalViewAngle());
+			attitudePosition.setAngv(camPreview.getVerticalViewAngle());
 			location = posManager.getLocation();
 			if (connectorMQTT.connectionEstablished()) {
 				json = gson.toJson(attitudePosition);
