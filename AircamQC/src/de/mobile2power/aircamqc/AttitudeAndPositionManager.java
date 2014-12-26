@@ -71,7 +71,7 @@ public class AttitudeAndPositionManager implements GPSCallback, SensorEventListe
 	        float[] orientationVals = new float[3];
 			SensorManager.getOrientation(remapCoords, orientationVals );
 			
-			attitudePosition.setYaw(Math.toDegrees(orientationVals[0] + Math.PI));
+			attitudePosition.setYaw(Math.toDegrees(orientationVals[0]));
 			attitudePosition.setPit(Math.toDegrees(orientationVals[1]));
 			attitudePosition.setRol(Math.toDegrees(orientationVals[2]));
 		}

@@ -22,6 +22,11 @@ Location currentLocation = new Location(54.5f, 8.0f);
 public void setup() {
   size(1300, 880, P2D);
   noStroke();
+
+  PFont mono;
+  mono = loadFont("AndaleMono-18.vlw");
+  textFont(mono);
+
   hostId = System.getenv("computername");
   if (hostId == null || hostId.length() == 0) {
     hostId = System.getenv("hostname");
@@ -31,10 +36,6 @@ public void setup() {
 
   gson = new Gson();
   uasPos = new CamPosAndView();
-
-  //  CamPosAndView obj = new AttitudeAndPosition();
-  //  String json = gson.toJson(obj);
-  //  System.out.println(json);
 
   map = new UnfoldingMap(this, new Microsoft.AerialProvider());
   map.setTweening(true);
@@ -54,6 +55,8 @@ void keyPressed() {
     client.subscribe( "uascon/+/position", qos );
   } else if (key == ' ') {
     client.publishAtLeastOnce("uascon/"+hostId+"/event", "{\"cam\":\"takepicture\"}");
+  } else if (key == 'm' || key == 'M') {
+    map.zoomAndPanTo(currentLocation, 17);
   }
 }
 
@@ -63,22 +66,38 @@ public void draw() {
 
   // Draws locations on screen positions according to their geo-locations.
 
-  //  currentLocation = new Location(52.5f - (my / 30.0f), 8.0f + (mx / 30.0f));
   currentLocation = new Location(uasPos.getLat(), uasPos.getLon());
 
-  // Fixed-size marker
   ScreenPosition posScreen = map.getScreenPosition(currentLocation);
-  fill(200, 200, 200, 250);
+  ImageSize size = calculateImageGroundSize(uasPos.getAngh(), uasPos.getAngv(), 20.0);
+
+  fill(230, 230, 230, 255);
   text(String.format("%.1f", uasPos.getAlt()), posScreen.x, posScreen.y);
-  fill(200, 0, 0, 250);
   translate(posScreen.x, posScreen.y);
 
   rotate((float)Math.toRadians(uasPos.getYaw()));
+  fill(200, 100, 0, 80);
+  rect(-(size.getWith()/2), -(size.getHeight()/2), size.getWith(), size.getHeight());
+  fill(200, 0, 0, 250);
   triangle(0, 0, 7, 20, -7, 20);
 }
 
 void mqttCallback(MQTTPublish msg) {
   String payload = new String(msg.getPayload());
   uasPos = gson.fromJson(payload, CamPosAndView.class);
+}
+
+ImageSize calculateImageGroundSize(double angleHorizontal, double angleVertical, double altitude) {
+  float halfHorizontalMeter = (float)altitude * (float)Math.tan(Math.toRadians(angleHorizontal) / 2.0);
+  float halfVerticalMeter   = (float)altitude * (float)Math.tan(Math.toRadians(angleVertical) / 2.0);
+
+  Location movedHor = GeoUtils.getDestinationLocation(currentLocation, 0.0, halfHorizontalMeter / 1000.0);
+  Location corner = GeoUtils.getDestinationLocation(movedHor, 90.0, halfVerticalMeter / 1000.0);
+  ScreenPosition cornerPos = map.getScreenPosition(corner);
+  ScreenPosition posScreen = map.getScreenPosition(currentLocation);
+  ImageSize size = new ImageSize();
+  size.setWith((cornerPos.x - posScreen.x)*2);
+  size.setHeight((cornerPos.y - posScreen.y)*2);
+  return size;
 }
 
