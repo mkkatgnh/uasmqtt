@@ -205,11 +205,11 @@ class CamPreview extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	
 	double getVerticalViewAngle() {
-		return camera.getParameters().getVerticalViewAngle();
+		return camera != null ? camera.getParameters().getVerticalViewAngle() : 0.0d;
 	}
 	
 	double getHorizontalViewAngle() {
-		return camera.getParameters().getHorizontalViewAngle();
+		return camera != null ? camera.getParameters().getHorizontalViewAngle() : 0.0d;
 	}
 
 }
