@@ -1,5 +1,6 @@
 package de.mobile2power.aircamqc;
 
+
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
