@@ -61,8 +61,9 @@ public class Operator implements MqttCallback {
 			attitudePosition.setAngh(camPreview.getHorizontalViewAngle());
 			attitudePosition.setAngv(camPreview.getVerticalViewAngle());
 			location = posManager.getLocation();
+			json = gson.toJson(attitudePosition);
+			camPreview.setAttitudePositionJson(json);
 			if (connectorMQTT.connectionEstablished()) {
-				json = gson.toJson(attitudePosition);
 				connectorMQTT.sendMessage(json.getBytes(), "position");
 			}
 		}

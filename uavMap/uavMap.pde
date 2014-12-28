@@ -74,7 +74,7 @@ public void draw() {
   currentLocation = new Location(uasPos.getLat(), uasPos.getLon());
 
   ScreenPosition posScreen = map.getScreenPosition(currentLocation);
-  ImageSize size = calculateImageGroundSize(uasPos.getAngh(), uasPos.getAngv(), 20.0); // uasPos.getAlt());
+  ImageSize size = calculateImageGroundSize(uasPos.getAngh(), uasPos.getAngv(), uasPos.getAlt());
 
   fill(230, 230, 230, 255);
   text(String.format("%.1f", uasPos.getAlt()), posScreen.x, posScreen.y);
@@ -101,7 +101,7 @@ void drawTakenPhotoAreaSize() {
 
     ScreenPosition photoPosScreen = map.getScreenPosition(photoLocation);
 
-    ImageSize photoSize = calculateImageGroundSize(photoPos.getAngh(), photoPos.getAngv(), 20.0); // photoPos.getAlt());
+    ImageSize photoSize = calculateImageGroundSize(photoPos.getAngh(), photoPos.getAngv(), photoPos.getAlt());
 
     pushMatrix();
     translate(photoPosScreen.x, photoPosScreen.y);

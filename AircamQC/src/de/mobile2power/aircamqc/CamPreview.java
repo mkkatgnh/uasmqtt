@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +31,8 @@ class CamPreview extends SurfaceView implements SurfaceHolder.Callback {
 	private long takePictureCallbackInactiveTimestamp = 0l;
 	private String pictureFolder = null;
 	private Activity parentActivity;
-	private CamPosAndView attitudePosition;
+//	private CamPosAndView attitudePosition;
+	private String attitudePositionJson = "";
 
 	CamPreview(Activity context) {
 		super(context);
@@ -176,6 +178,11 @@ class CamPreview extends SurfaceView implements SurfaceHolder.Callback {
 				Log.d("AircamQC", pictureNameAbsolute);
 				outStream.write(data);
 				outStream.close();
+				
+				PrintWriter out = new PrintWriter(pictureFolder + File.separator
+						+ timeStamp + ".json");
+				out.println(attitudePositionJson);
+				out.close();
 			} catch (FileNotFoundException e) { // <10>
 				Log.e("AircamQC", e.getMessage());
 			} catch (IOException e) {
@@ -210,6 +217,10 @@ class CamPreview extends SurfaceView implements SurfaceHolder.Callback {
 	
 	double getHorizontalViewAngle() {
 		return camera != null ? camera.getParameters().getHorizontalViewAngle() : 0.0d;
+	}
+
+	public void setAttitudePositionJson(String json) {
+		attitudePositionJson = json;
 	}
 
 }
