@@ -1,4 +1,4 @@
-package de.mobile2power.aircamqc;
+package de.mobile2power.aircamqcviewer;
 
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -14,7 +14,7 @@ public class ConnectorMQTT {
 	private int qos = 0;
 	// private String broker = "tcp://iot.eclipse.org:1883";
 	private String broker = "tcp://keydel.net:1883";
-	private String clientId = "androidtx";
+	private String clientId = "androidrx";
 	private MqttClient sampleClient;
 	MemoryPersistence persistence = new MemoryPersistence();
 	MqttConnectOptions connOpts;
@@ -64,8 +64,10 @@ public class ConnectorMQTT {
 	public void connect() {
 		try {
 			sampleClient.connect(connOpts);
-			int subQoS = 0;
-			sampleClient.subscribe("uascon/+/event", subQoS);
+			int[] subQoS = {0, 0};
+			String[] topics = {"uascon/+/position", "uascon/+/campreview"};
+			sampleClient.subscribe(topics, subQoS);
+//			sampleClient.subscribe("uascon/+/position", 0);
 		} catch (MqttSecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

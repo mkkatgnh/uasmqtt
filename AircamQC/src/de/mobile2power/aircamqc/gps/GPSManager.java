@@ -1,5 +1,6 @@
 package de.mobile2power.aircamqc.gps;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.location.Criteria;
@@ -15,7 +16,7 @@ public class GPSManager
 	
 	private LocationManager locationManager = null;
 	private LocationListener locationListener = null;
-	private GPSCallback gpsCallback = null;
+	private List<GPSCallback> gpsCallbackListener = new ArrayList<GPSCallback>();
 	
 	public GPSManager()
 	{
@@ -35,9 +36,11 @@ public class GPSManager
 			
 			public void onLocationChanged(final Location location)
 			{
-				if (location != null && gpsCallback != null)
+				if (location != null && gpsCallbackListener.size() > 0)
 				{
+					for (GPSCallback gpsCallback : gpsCallbackListener) {
 					gpsCallback.onGPSUpdate(location);
+					}
 				}
 			}
 		};
@@ -91,11 +94,11 @@ public class GPSManager
 	
 	public void setGPSCallback(final GPSCallback gpsCallback)
 	{
-		this.gpsCallback = gpsCallback;
+		this.gpsCallbackListener.add(gpsCallback);
 	}
 	
-	public GPSCallback getGPSCallback()
-	{
-		return gpsCallback;
-	}
+//	public GPSCallback getGPSCallback()
+//	{
+//		return gpsCallback;
+//	}
 }

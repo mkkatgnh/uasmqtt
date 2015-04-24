@@ -1,15 +1,21 @@
 package de.mobile2power.aircamqc;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import android.app.Activity;
+import android.graphics.ImageFormat;
+import android.graphics.Rect;
+import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
@@ -24,6 +30,9 @@ import android.view.SurfaceView;
 
 class CamPreview extends SurfaceView implements SurfaceHolder.Callback {
 
+	private static final int PREVIEW_WIDTH = 267;
+	private static final int PREVIEW_HEIGHT = 216;
+
 	private static final int WAIT_MILLIS_TILL_NEXTPIC = 100;
 	SurfaceHolder mHolder; // <2>
 	public Camera camera = null; // <3>
@@ -31,8 +40,15 @@ class CamPreview extends SurfaceView implements SurfaceHolder.Callback {
 	private long takePictureCallbackInactiveTimestamp = 0l;
 	private String pictureFolder = null;
 	private Activity parentActivity;
-//	private CamPosAndView attitudePosition;
+	// private CamPosAndView attitudePosition;
 	private String attitudePositionJson = "";
+
+	private int compressionValue = 8;
+	private int previewWidth = 0;
+	private int previewHeight = 0;
+	private int[] previewFPS = { 0, 0 };
+	private Rect rect;
+	private Preview preview;
 
 	CamPreview(Activity context) {
 		super(context);
@@ -51,8 +67,11 @@ class CamPreview extends SurfaceView implements SurfaceHolder.Callback {
 		// to draw.
 		if (camera == null) {
 			camera = Camera.open(); // <8>
+			chooseCamPreviewSize();
+			chooseCamSize();
+			chooseCamPreviewFPS();
+			installCamPreviewBuffer();
 			try {
-				chooseCamSize();
 				camera.setPreviewDisplay(holder); // <9>
 
 				preparePreviewCallbackOnCam();
@@ -63,23 +82,82 @@ class CamPreview extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
+	public void preparePreviewCallbackOnCam() {
+
+		camera.setPreviewCallbackWithBuffer(new PreviewCallback() { // <10>
+			// Called for each frame previewed
+			public void onPreviewFrame(byte[] data, Camera camera) { // <11>
+				Camera.Parameters parameters = camera.getParameters();
+
+				int width = parameters.getPreviewSize().width;
+				int height = parameters.getPreviewSize().height;
+
+				ByteArrayOutputStream outstr = new ByteArrayOutputStream();
+				YuvImage yuvimage = new YuvImage(data, ImageFormat.NV21, width,
+						height, null);
+				yuvimage.compressToJpeg(rect, compressionValue, outstr);
+
+				preview.setJpegImage(outstr.toByteArray());
+				camera.addCallbackBuffer(data);
+				// CamPreview.this.invalidate(); // <12>
+			}
+		});
+		// }
+	}
+
+	private void chooseCamPreviewSize() {
+		if (camera != null && camera.getParameters() != null) {
+			List<Size> sizes = camera.getParameters()
+					.getSupportedPreviewSizes();
+			Iterator<Size> sizesIter = sizes.iterator();
+			Size size = null;
+			do {
+				size = sizesIter.next();
+			} while (sizesIter.hasNext() && size.width < PREVIEW_WIDTH);
+			previewWidth = size.width;
+			previewHeight = size.height;
+		}
+		rect = new Rect(0, 0, previewWidth, previewHeight);
+	}
+
+	
+	private void chooseCamPreviewFPS() {
+		Camera.Parameters parameters = camera.getParameters();
+		List<int[]> fpss = new ArrayList<int[]>();
+		fpss.addAll(parameters.getSupportedPreviewFpsRange());
+		if (fpss != null) {
+			previewFPS = fpss.get(fpss.size() - 1);
+		}
+	}
+
+	private void installCamPreviewBuffer() {
+		final int BITS_PER_BYTE = 8;
+		final int bytesPerPixel = ImageFormat.getBitsPerPixel(camera
+				.getParameters().getPreviewFormat()) / BITS_PER_BYTE;
+		// XXX: According to the documentation the buffer size can be
+		// calculated by width * height * bytesPerPixel. However, this
+		// returned an error saying it was too small. It always needed
+		// to be exactly 1.5 times larger.
+		int mPreviewBufferSize = previewWidth * previewHeight * bytesPerPixel
+				* 3 / 2 + 1;
+		camera.addCallbackBuffer(new byte[mPreviewBufferSize]);
+	}
+
 	private void chooseCamSize() {
 		if (camera != null && camera.getParameters() != null) {
 			Parameters parameters = camera.getParameters();
 			List<Size> sizes = parameters.getSupportedPictureSizes();
-			parameters.setPictureSize(sizes.get(sizes.size()-1).width, sizes.get(sizes.size()-1).height);
+			int maxWidth = 0;
+			int maxHeight = 0;
+			for (Size size : sizes) {
+				if (size.width > maxWidth) {
+					maxWidth = size.width;
+					maxHeight = size.height;
+				}
+			}
+			parameters.setPictureSize(maxWidth, maxHeight);
 			camera.setParameters(parameters);
 		}
-	}
-
-	public void preparePreviewCallbackOnCam() {
-		camera.setPreviewCallback(new PreviewCallback() { // <10>
-			// Called for each frame previewed
-			public void onPreviewFrame(byte[] data, Camera camera) { // <11>
-
-				// CamPreview.this.invalidate(); // <12>
-			}
-		});
 	}
 
 	// Called when the holder is destroyed
@@ -139,13 +217,15 @@ class CamPreview extends SurfaceView implements SurfaceHolder.Callback {
 
 	public void takePicture(Location location) {
 		takePictureCallbackInactive = false;
-		Parameters parameters = camera.getParameters();
-		parameters.setGpsLatitude(location.getLatitude());
-		parameters.setGpsLongitude(location.getLongitude());
-		parameters.setGpsAltitude(location.getAltitude());
-		parameters.setGpsTimestamp(location.getTime());
-		parameters.setGpsProcessingMethod("Android Location");
-		camera.setParameters(parameters);
+		if (location != null) {
+			Parameters parameters = camera.getParameters();
+			parameters.setGpsLatitude(location.getLatitude());
+			parameters.setGpsLongitude(location.getLongitude());
+			parameters.setGpsAltitude(location.getAltitude());
+			parameters.setGpsTimestamp(location.getTime());
+			parameters.setGpsProcessingMethod("Android Location");
+			camera.setParameters(parameters);
+		}
 		camera.takePicture(shutterCallback, rawCallback, jpegCallback);
 		Log.d("AircamQC", "takePicture");
 	}
@@ -178,9 +258,9 @@ class CamPreview extends SurfaceView implements SurfaceHolder.Callback {
 				Log.d("AircamQC", pictureNameAbsolute);
 				outStream.write(data);
 				outStream.close();
-				
-				PrintWriter out = new PrintWriter(pictureFolder + File.separator
-						+ timeStamp + ".json");
+
+				PrintWriter out = new PrintWriter(pictureFolder
+						+ File.separator + timeStamp + ".json");
 				out.println(attitudePositionJson);
 				out.close();
 			} catch (FileNotFoundException e) { // <10>
@@ -210,17 +290,23 @@ class CamPreview extends SurfaceView implements SurfaceHolder.Callback {
 	public void setPictureFolder(String pictureFolder) {
 		this.pictureFolder = pictureFolder;
 	}
-	
+
 	double getVerticalViewAngle() {
-		return camera != null ? camera.getParameters().getVerticalViewAngle() : 0.0d;
+		return camera != null ? camera.getParameters().getVerticalViewAngle()
+				: 0.0d;
 	}
-	
+
 	double getHorizontalViewAngle() {
-		return camera != null ? camera.getParameters().getHorizontalViewAngle() : 0.0d;
+		return camera != null ? camera.getParameters().getHorizontalViewAngle()
+				: 0.0d;
 	}
 
 	public void setAttitudePositionJson(String json) {
 		attitudePositionJson = json;
+	}
+
+	public void setPreviewDTO(Preview previewDTO) {
+		this.preview = previewDTO;
 	}
 
 }

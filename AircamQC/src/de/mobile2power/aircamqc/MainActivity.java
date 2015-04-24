@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
@@ -33,9 +34,10 @@ public class MainActivity extends Activity {
 		mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
 		// Create a bright wake lock
 		mWakeLock = mPowerManager.newWakeLock(
-				PowerManager.SCREEN_DIM_WAKE_LOCK, getClass().getName());
+				PowerManager.SCREEN_BRIGHT_WAKE_LOCK, getClass().getName());
 
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
 		
 		operator = new Operator((LocationManager) this.getSystemService(Context.LOCATION_SERVICE));
 
@@ -43,7 +45,6 @@ public class MainActivity extends Activity {
 				.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 		
 		initGUIElements();
-//		operator.setCamPreview(camPreview);
 		initCamPreview();
 		
 		operator.run();
@@ -59,9 +60,18 @@ public class MainActivity extends Activity {
 		final Button buttonStart = (Button) findViewById(R.id.connectMQTTBrokerButton);
 		buttonStart.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				startPreview();
 				EditText brokerUrl = (EditText) findViewById(R.id.mqttBrokerUrl);
 				operator.setup(brokerUrl.getText().toString());
 				operator.connectToBroker();
+			}
+
+			private void startPreview() {
+				if (camPreview.isTakePictureCallbackInactive()) {
+					// Log.d("pic", "start preview");
+					camPreview.preparePreviewCallbackOnCam();
+					camPreview.startPreview();
+				}
 			}
 		});
 
@@ -76,6 +86,15 @@ public class MainActivity extends Activity {
 		buttonAltToZero.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				operator.altitudeSetZero();
+			}
+		});
+		
+		final CheckBox checkboxTransmitPreview = (CheckBox) findViewById(R.id.setTransmitPreviewCheckBox);
+		checkboxTransmitPreview.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				operator.previewTransmit(checkboxTransmitPreview.isChecked());
 			}
 		});
 	}

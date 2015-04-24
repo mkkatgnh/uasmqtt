@@ -16,8 +16,12 @@ import com.google.gson.Gson;
 
 public class Operator implements MqttCallback {
 
-	private long time1fps = 0;
-	private long timeFps = 100; // 10 per seconds
+	private long currentTimeMqtt = 0;
+	private long currentTimePreview = 0;
+	private long currentTimeControlQC = 0;
+	private static final long TIME_5_FPS = 1000 / 5; // 10 per seconds
+	private static final long TIME_10_FPS = 1000 / 10; // 10 per seconds
+	private static final long TIME_50_FPS = 1000 / 50;
 	private AttitudeAndPositionManager posManager = new AttitudeAndPositionManager();
 	private ConnectorMQTT connectorMQTT = new ConnectorMQTT();
 	private CamPosAndView attitudePosition;
@@ -26,9 +30,11 @@ public class Operator implements MqttCallback {
 	private String json;
 	private CamPreview camPreview;
 	private boolean previewHasToRestart = false;
-	private String pictureFolder = Environment.getExternalStorageDirectory().getPath() + File.separator + "AircamQC";
+	private String pictureFolder = Environment.getExternalStorageDirectory()
+			.getPath() + File.separator + "AircamQC";
 	private Location location;
-
+	private Preview previewDTO = new Preview();
+	private boolean previewTransmit;
 
 	public Operator(LocationManager locationManager) {
 		posManager.setup(locationManager);
@@ -54,8 +60,8 @@ public class Operator implements MqttCallback {
 
 	public void communicateTaskCaller(long currentTime) throws IOException {
 
-		if (currentTime > (time1fps + timeFps)) {
-			time1fps = currentTime;
+		if (currentTime > (currentTimeMqtt + TIME_10_FPS)) {
+			currentTimeMqtt = currentTime;
 			// send periodly
 			attitudePosition = posManager.getAttitudePosition();
 			attitudePosition.setAngh(camPreview.getHorizontalViewAngle());
@@ -66,6 +72,23 @@ public class Operator implements MqttCallback {
 			if (connectorMQTT.connectionEstablished()) {
 				connectorMQTT.sendMessage(json.getBytes(), "position");
 			}
+		}
+		if (currentTime > (currentTimePreview + TIME_5_FPS)) {
+			currentTimePreview = currentTime;
+			// send periodly
+			if (connectorMQTT.connectionEstablished()) {
+				if (previewTransmit) {
+					connectorMQTT.sendMessage(previewDTO.getJpegImage(),
+							"campreview");
+				}
+			}
+		}
+	}
+
+	public void controlQC(long currentTime) {
+		if (currentTime > (currentTimeControlQC + TIME_50_FPS)) {
+			currentTimeControlQC = currentTime;
+			// send periodly
 		}
 	}
 
@@ -83,6 +106,7 @@ public class Operator implements MqttCallback {
 			while (true) {
 				try {
 					parent.communicateTaskCaller(currentTime);
+					// parent.controlQC(currentTime);
 					parent.restartPreview();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -116,8 +140,9 @@ public class Operator implements MqttCallback {
 	public void setCamPreview(CamPreview camPreview) {
 		this.camPreview = camPreview;
 		this.camPreview.setPictureFolder(pictureFolder);
+		this.camPreview.setPreviewDTO(previewDTO);
 	}
-	
+
 	private void takePicture() {
 		if (previewHasToRestart == false) {
 			camPreview.takePicture(location);
@@ -142,11 +167,16 @@ public class Operator implements MqttCallback {
 	@Override
 	public void deliveryComplete(IMqttDeliveryToken arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void messageArrived(String topic, MqttMessage content) throws Exception {
+	public void messageArrived(String topic, MqttMessage content)
+			throws Exception {
 		takePicture();
+	}
+
+	public void previewTransmit(boolean checked) {
+		this.previewTransmit = checked;
 	}
 }
