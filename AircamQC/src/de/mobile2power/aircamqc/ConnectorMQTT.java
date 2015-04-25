@@ -13,7 +13,7 @@ public class ConnectorMQTT {
 	private String topic = "uascon";
 	private int qos = 0;
 	// private String broker = "tcp://iot.eclipse.org:1883";
-	private String broker = "tcp://keydel.net:1883";
+	private String broker = "tcp://broker.mqtt-dashboard.com:1883";
 	private String clientId = "androidtx";
 	private MqttClient sampleClient;
 	MemoryPersistence persistence = new MemoryPersistence();

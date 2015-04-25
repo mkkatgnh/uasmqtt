@@ -7,7 +7,7 @@
     <string name="connect_mqtt_broker_button">connect</string>
     <string name="set_altitude_level_to_zero_label">Set Alt. to zero</string>
     <string name="set_altitude_level_to_zero_button">set zero</string>
-    <string name="default_uri_of_broker">tcp://keydel.net:1883</string>
+    <string name="default_uri_of_broker">tcp://broker.mqtt-dashboard.com:1883</string>
     <string name="transmit_preview">Transmit preview</string>
     <!-- <string name="default_uri_of_broker">tcp://192.168.43.187:1883</string> -->
 
