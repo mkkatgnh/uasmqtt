@@ -35,9 +35,10 @@ public class Operator implements MqttCallback {
 	private Location location;
 	private Preview previewDTO = new Preview();
 	private boolean previewTransmit;
+	private boolean pressureSensorAvailable = false;
 
 	public Operator(LocationManager locationManager) {
-		posManager.setup(locationManager);
+		posManager.setup(locationManager, pressureSensorAvailable);
 		File folder = new File(pictureFolder);
 		if (!folder.exists()) {
 			folder.mkdir();
@@ -178,5 +179,9 @@ public class Operator implements MqttCallback {
 
 	public void previewTransmit(boolean checked) {
 		this.previewTransmit = checked;
+	}
+
+	public void setPressureSensorAvailable(boolean airPressureSensorAvailable) {
+		this.pressureSensorAvailable = airPressureSensorAvailable;
 	}
 }

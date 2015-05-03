@@ -13,12 +13,11 @@ public class Operator implements MqttCallback {
 	private long currentTimeMqtt = 0;
 	private static final long TIME_10_FPS = 1000 / 10; // 10 per seconds
 	private ConnectorMQTT connectorMQTT = new ConnectorMQTT();
-	private CamPosAndView attitudePosition;
 	private Sender sender;
 	private Gson gson = new Gson();
-	private String json;
 	private Preview previewDTO = null;
 	private TakePictureState takePictureState = null;
+	private UavPosition uavPosition;
 
 	public void setup(String brokerUrl) {
 		connectorMQTT.setupConnection(brokerUrl, this);
@@ -35,9 +34,7 @@ public class Operator implements MqttCallback {
 		if (currentTime > (currentTimeMqtt + TIME_10_FPS)) {
 			currentTimeMqtt = currentTime;
 			// send periodly
-			json = gson.toJson(attitudePosition);
 			if (connectorMQTT.connectionEstablished()) {
-//				connectorMQTT.sendMessage(json.getBytes(), "position");
 				if (takePictureState.isRelease()) {
 					connectorMQTT.sendMessage(
 							"{\"cam\":\"takepicture\"}".getBytes(), "event");
@@ -107,14 +104,12 @@ public class Operator implements MqttCallback {
 			previewDTO.setWidth(640);
 			previewDTO.setHeight(480);
 		}
-//		if (topic.endsWith("position")) {
-//			String payload = new String(message.getPayload());
-//			CamPosAndView uasPos = new CamPosAndView();
-//			uasPos = gson.fromJson(payload, CamPosAndView.class);
-//			attitudePosition.setAlt(uasPos.getAlt());
-//			attitudePosition.setLat(uasPos.getLat());
-//			attitudePosition.setLon(uasPos.getLon());
-//		}
+		if (topic.endsWith("position")) {
+			String payload = new String(message.getPayload());
+			CamPosAndView uasPos = new CamPosAndView();
+			uasPos = gson.fromJson(payload, CamPosAndView.class);
+			uavPosition.setAltitude(uasPos.getAlt());
+		}
 	}
 
 	public void setPreview(Preview preview) {
@@ -123,5 +118,10 @@ public class Operator implements MqttCallback {
 
 	public void setTakePictureState(TakePictureState takePictureState) {
 		this.takePictureState = takePictureState;
+	}
+
+	public void setUavPosition(UavPosition uavPosition) {
+		this.uavPosition = uavPosition;
+		
 	}
 }

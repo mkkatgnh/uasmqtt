@@ -30,8 +30,9 @@ import android.view.SurfaceView;
 
 class CamPreview extends SurfaceView implements SurfaceHolder.Callback {
 
-	private static final int PREVIEW_WIDTH = 267;
-	private static final int PREVIEW_HEIGHT = 216;
+	private static final int FACTOR_TO_GET_ENOUGH_EVEN_FOR_P880 = 9;
+
+	private static final int PREVIEW_WIDTH = 640;
 
 	private static final int WAIT_MILLIS_TILL_NEXTPIC = 100;
 	SurfaceHolder mHolder; // <2>
@@ -117,6 +118,7 @@ class CamPreview extends SurfaceView implements SurfaceHolder.Callback {
 			previewWidth = size.width;
 			previewHeight = size.height;
 		}
+		camera.getParameters().setPreviewSize(previewWidth, previewHeight);
 		rect = new Rect(0, 0, previewWidth, previewHeight);
 	}
 
@@ -132,14 +134,14 @@ class CamPreview extends SurfaceView implements SurfaceHolder.Callback {
 
 	private void installCamPreviewBuffer() {
 		final int BITS_PER_BYTE = 8;
-		final int bytesPerPixel = ImageFormat.getBitsPerPixel(camera
-				.getParameters().getPreviewFormat()) / BITS_PER_BYTE;
+		final int bitsPerPixel = ImageFormat.getBitsPerPixel(camera
+				.getParameters().getPreviewFormat());
 		// XXX: According to the documentation the buffer size can be
 		// calculated by width * height * bytesPerPixel. However, this
 		// returned an error saying it was too small. It always needed
-		// to be exactly 1.5 times larger.
-		int mPreviewBufferSize = previewWidth * previewHeight * bytesPerPixel
-				* 3 / 2 + 1;
+		// to be exactly 1.5 times larger. But the P880 need more than 1.5 times. 9 times seems ok.
+		int mPreviewBufferSize = previewWidth * previewHeight * bitsPerPixel / BITS_PER_BYTE
+				* FACTOR_TO_GET_ENOUGH_EVEN_FOR_P880 + 1;
 		camera.addCallbackBuffer(new byte[mPreviewBufferSize]);
 	}
 

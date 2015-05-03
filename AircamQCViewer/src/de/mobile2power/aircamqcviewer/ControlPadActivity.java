@@ -75,6 +75,7 @@ public class ControlPadActivity extends Activity  {
 		pictureTakeState = new TakePictureState();
 		pictureTakeState.reset();
 		operator.setTakePictureState(pictureTakeState);
+		operator.setUavPosition(uavPosition);
 		
 		operator.run();
 

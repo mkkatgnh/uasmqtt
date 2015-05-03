@@ -1,5 +1,7 @@
 package de.mobile2power.aircamqc;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
@@ -40,6 +42,7 @@ public class MainActivity extends Activity {
 
 		
 		operator = new Operator((LocationManager) this.getSystemService(Context.LOCATION_SERVICE));
+		operator.setPressureSensorAvailable(airPressureSensorAvailable());
 
 		mRotationVectorSensor = mSensorManager
 				.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
@@ -48,6 +51,20 @@ public class MainActivity extends Activity {
 		initCamPreview();
 		
 		operator.run();
+	}
+
+	private boolean airPressureSensorAvailable() {
+		if (mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE) != null) {
+			List<Sensor> pressureSensors = mSensorManager
+					.getSensorList(Sensor.TYPE_PRESSURE);
+			for (int i = 0; i < pressureSensors.size(); i++) {
+				if ((pressureSensors.get(i).getVendor().contains("Google Inc."))
+						&& (pressureSensors.get(i).getVersion() == 3)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private void initCamPreview() {
