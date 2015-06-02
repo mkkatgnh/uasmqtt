@@ -2,6 +2,8 @@ package de.mobile2power.aircamqc;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -36,6 +38,9 @@ public class Operator implements MqttCallback {
 	private Preview previewDTO = new Preview();
 	private boolean previewTransmit;
 	private boolean pressureSensorAvailable = false;
+
+	private OutputStream bluetoothOutStream = null;
+	private InputStream bluetoothInStream = null;
 
 	public Operator(LocationManager locationManager) {
 		posManager.setup(locationManager, pressureSensorAvailable);
@@ -174,7 +179,58 @@ public class Operator implements MqttCallback {
 	@Override
 	public void messageArrived(String topic, MqttMessage content)
 			throws Exception {
-		takePicture();
+		if (topic.contains(connectorMQTT.clientId)) {
+			return;
+		}
+		if (topic.endsWith("event")) {
+			String payload = new String(content.getPayload());
+			Event event = new Event();
+			event = gson.fromJson(payload, Event.class);
+			if ("cam".equals(event.getType())
+					&& "takepicture".equals(event.getAction())) {
+				takePicture();
+			}
+		}
+		if (bluetoothOutStream != null && topic.endsWith("mavlink")) {
+			byte[] payload = content.getPayload();
+			bluetoothOutStream.write(payload, 0, payload.length);
+			bluetoothOutStream.flush();
+		}
+	}
+
+	class BluetoothReceiverThread extends Thread {
+
+		@Override
+		public void run() {
+			while (true) {
+				try {
+					if (bluetoothInStream != null
+							&& bluetoothInStream.available() > 0) {
+						byte[] buffer = new byte[1024];
+						int len;
+						byte[] txBuffer = null;
+						while ((len = bluetoothInStream.read(buffer)) != -1) {
+							txBuffer = new byte[len];
+							for (int i = 0; i < len; i++) {
+								txBuffer[i] = buffer[i];
+							}
+						}
+						connectorMQTT.sendMessage(txBuffer, "mavlink");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				try {
+					sleep(50);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}
+
 	}
 
 	public void previewTransmit(boolean checked) {
@@ -183,5 +239,13 @@ public class Operator implements MqttCallback {
 
 	public void setPressureSensorAvailable(boolean airPressureSensorAvailable) {
 		this.pressureSensorAvailable = airPressureSensorAvailable;
+	}
+
+	public void setOutputStream(OutputStream bluetoothOutStream) {
+		this.bluetoothOutStream = bluetoothOutStream;
+	}
+
+	public void setInputStream(InputStream bluetoothInStream) {
+		this.bluetoothInStream = bluetoothInStream;
 	}
 }

@@ -1,5 +1,8 @@
 package de.mobile2power.aircamqc;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -13,10 +16,14 @@ import android.os.PowerManager.WakeLock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -26,6 +33,14 @@ public class MainActivity extends Activity {
 	private PowerManager mPowerManager;
 	private Sensor mRotationVectorSensor;
 	private CamPreview camPreview; // <1>
+	
+	private Spinner bluetoothDeviceSpinner;
+	private BluetoothManager bluetoothManager = new BluetoothManager();
+	private OutputStream bluetoothOutStream = null;
+	private InputStream bluetoothInStream = null;
+	private boolean bluetoothConnectionEstablished = false;
+	private String bluetoothNameAndAddress;
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +62,8 @@ public class MainActivity extends Activity {
 		mRotationVectorSensor = mSensorManager
 				.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 		
+		fillBluetoothSpiner();
+
 		initGUIElements();
 		initCamPreview();
 		
@@ -114,6 +131,14 @@ public class MainActivity extends Activity {
 				operator.previewTransmit(checkboxTransmitPreview.isChecked());
 			}
 		});
+
+		final Button buttonConnectBT = (Button) findViewById(R.id.connectBluetoothDeviceButton);
+		buttonConnectBT.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				getValuesFromInput();
+				connectBTDevice();
+			}
+		});
 	}
 
 	@Override
@@ -135,6 +160,66 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	public void connectBTDevice() {
+		bluetoothConnectionEstablished = bluetoothManager
+				.connectToDevice(bluetoothNameAndAddress);
+		if (bluetoothConnectionEstablished) {
+			bluetoothOutStream = bluetoothManager
+					.getOutputStream();
+			operator.setOutputStream(bluetoothOutStream);
+			bluetoothInStream = bluetoothManager.getInputStream();
+			operator.setInputStream(bluetoothInStream);
+		} else {
+			Toast.makeText(this, "Cannot connect to bluetooth device",
+					Toast.LENGTH_LONG).show();
+		}
+	}
+
+	private void fillBluetoothSpiner() {
+		List<String> spinnerArray = new ArrayList<String>();
+		String[] boundedDevices = bluetoothManager
+				.getBoundedDevices();
+		int selectedDevice = -1;
+		int i = 0;
+		if (boundedDevices != null) {
+			for (String device : boundedDevices) {
+				spinnerArray.add(device.split(",")[0]);
+				i++;
+			}
+		} else {
+			Toast.makeText(this,
+					"There are no bounded bluetooth devices available",
+					Toast.LENGTH_LONG).show();
+		}
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, spinnerArray);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		bluetoothDeviceSpinner = (Spinner) findViewById(R.id.bluetoothSpinner);
+		bluetoothDeviceSpinner.setAdapter(adapter);
+		bluetoothDeviceSpinner.setSelection(selectedDevice);
+	}
+
+	private void getValuesFromInput() {
+		String[] boundedDevices = bluetoothManager
+				.getBoundedDevices();
+		if (bluetoothDeviceSpinner.getSelectedItemPosition() != AdapterView.INVALID_POSITION) {
+			bluetoothNameAndAddress = boundedDevices[bluetoothDeviceSpinner
+							.getSelectedItemPosition()];
+		}
+	}
+
+//	private void transferDataToBluetooth(byte[] data) {
+//		if (bluetoothConnectionEstablished && bluetoothOutStream != null) {
+//			try {
+//				bluetoothOutStream.write(data);
+//				bluetoothOutStream.flush();
+//			} catch (IOException e) {
+//				// What do we do in case of connection lost to QC communication?
+//			}
+//		}
+//	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();

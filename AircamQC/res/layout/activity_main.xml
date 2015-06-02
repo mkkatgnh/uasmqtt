@@ -65,7 +65,6 @@
                     android:layout_height="wrap_content"
                     android:text="@string/disconnect_mqtt_broker_button"
                     tools:ignore="ButtonStyle" />
-
             </TableRow>
 
             <TableRow
@@ -86,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/set_altitude_level_to_zero_button" />
             </TableRow>
-            
+
             <TableRow
                 android:id="@+id/tableRowsetTransmitPreview"
                 android:layout_width="match_parent"
@@ -99,10 +98,38 @@
                     android:layout_height="wrap_content"
                     android:text="@string/transmit_preview" />
 
-                <CheckBox android:id="@+id/setTransmitPreviewCheckBox"
-                    android:layout_width="wrap_content"/>
-             </TableRow>
-            
+                <CheckBox
+                    android:id="@+id/setTransmitPreviewCheckBox"
+                    android:layout_width="wrap_content" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/bluetoothDevicelistTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bluetooth_device" />
+
+                <Spinner
+                    android:id="@+id/bluetoothSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRowConnectBluetoothDeviceTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left" >
+
+                <Button
+                    android:id="@+id/connectBluetoothDeviceButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/connect_bluetooth_device_button"
+                    tools:ignore="ButtonStyle" />
+            </TableRow>
         </TableLayout>
 
         <FrameLayout
@@ -112,7 +139,6 @@
             android:layout_span="3"
             android:layout_weight="1"
             tools:ignore="ObsoleteLayoutParam,InefficientWeight" >
-
         </FrameLayout>
     </LinearLayout>
 

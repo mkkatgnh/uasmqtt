@@ -10,11 +10,11 @@ import org.eclipse.paho.client.mqttv3.MqttSecurityException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class ConnectorMQTT {
-	private String topic = "uascon";
+	private String topicDomain = "uascon";
 	private int qos = 0;
 	// private String broker = "tcp://iot.eclipse.org:1883";
 	private String broker = "tcp://broker.mqtt-dashboard.com:1883";
-	private String clientId = "androidtx";
+	public final String clientId = "androidtx";
 	private MqttClient sampleClient;
 	MemoryPersistence persistence = new MemoryPersistence();
 	MqttConnectOptions connOpts;
@@ -51,7 +51,7 @@ public class ConnectorMQTT {
 		MqttMessage message = new MqttMessage(payload);
 		message.setQos(qos);
 		try {
-			sampleClient.publish(topic + "/android/" + sensorPart, message);
+			sampleClient.publish(topicDomain + "/" + clientId + "/" + sensorPart, message);
 		} catch (MqttPersistenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,8 +64,9 @@ public class ConnectorMQTT {
 	public void connect() {
 		try {
 			sampleClient.connect(connOpts);
-			int subQoS = 0;
-			sampleClient.subscribe("uascon/+/event", subQoS);
+			int[] subQoS = {0, 0};
+			String[] topics = { topicDomain + "/+/event", topicDomain + "/+/mavlink"};
+			sampleClient.subscribe(topics, subQoS);
 		} catch (MqttSecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
