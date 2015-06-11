@@ -75,8 +75,10 @@ public class MQTTConnector extends Thread implements MqttCallback {
 		OutputStream out;
 		try {
 			out = client.getOutputStream();
-			out.write(mqttMessage.getPayload(), 0,
-					mqttMessage.getPayload().length);
+			if (out != null) {
+				out.write(mqttMessage.getPayload(), 0,
+						mqttMessage.getPayload().length);
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -129,18 +131,18 @@ public class MQTTConnector extends Thread implements MqttCallback {
 		int len;
 		len = inputstream.read(buffer);
 		byte[] txBuffer = new byte[len];
-		for (int i=0; i<len; i++) {
-			txBuffer[i] = buffer[i];
-		}
+		System.arraycopy(buffer, 0, txBuffer, 0, len);
 		MqttMessage message = new MqttMessage(txBuffer);
 		message.setQos(qos);
-		sampleClient.publish(topicDomain + "/" + clientId + "/mavlink", message);
+		sampleClient.publish(topicDomain + "/" + clientId + "/mavlink/gc",
+				message);
 	}
 
 	public void subscribeTopic() {
 		try {
 			int[] subQoS = { 0, 0 };
-			String[] topics = { topicDomain + "/+/event", topicDomain + "/+/mavlink" };
+			String[] topics = { topicDomain + "/+/event",
+					topicDomain + "/+/mavlink/uav" };
 			sampleClient.subscribe(topics, subQoS);
 		} catch (MqttSecurityException e) {
 			// TODO Auto-generated catch block

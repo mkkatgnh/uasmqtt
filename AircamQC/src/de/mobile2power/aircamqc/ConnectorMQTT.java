@@ -12,7 +12,6 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 public class ConnectorMQTT {
 	private String topicDomain = "uascon";
 	private int qos = 0;
-	// private String broker = "tcp://iot.eclipse.org:1883";
 	private String broker = "tcp://broker.mqtt-dashboard.com:1883";
 	public final String clientId = "androidtx";
 	private MqttClient sampleClient;
@@ -65,7 +64,7 @@ public class ConnectorMQTT {
 		try {
 			sampleClient.connect(connOpts);
 			int[] subQoS = {0, 0};
-			String[] topics = { topicDomain + "/+/event", topicDomain + "/+/mavlink"};
+			String[] topics = { topicDomain + "/+/event", topicDomain + "/+/mavlink/gc"};
 			sampleClient.subscribe(topics, subQoS);
 		} catch (MqttSecurityException e) {
 			// TODO Auto-generated catch block

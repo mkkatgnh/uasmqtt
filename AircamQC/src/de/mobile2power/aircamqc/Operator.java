@@ -28,6 +28,7 @@ public class Operator implements MqttCallback {
 	private ConnectorMQTT connectorMQTT = new ConnectorMQTT();
 	private CamPosAndView attitudePosition;
 	private Sender sender;
+	private BluetoothReceiverThread btReceiver;
 	private Gson gson = new Gson();
 	private String json;
 	private CamPreview camPreview;
@@ -62,6 +63,9 @@ public class Operator implements MqttCallback {
 		sender = new Sender();
 		sender.setParent(this);
 		sender.start();
+		btReceiver = new BluetoothReceiverThread();
+		btReceiver.start();
+
 	}
 
 	public void communicateTaskCaller(long currentTime) throws IOException {
@@ -191,7 +195,7 @@ public class Operator implements MqttCallback {
 				takePicture();
 			}
 		}
-		if (bluetoothOutStream != null && topic.endsWith("mavlink")) {
+		if (bluetoothOutStream != null && topic.endsWith("mavlink/gc")) {
 			byte[] payload = content.getPayload();
 			bluetoothOutStream.write(payload, 0, payload.length);
 			bluetoothOutStream.flush();
@@ -209,13 +213,10 @@ public class Operator implements MqttCallback {
 						byte[] buffer = new byte[1024];
 						int len;
 						byte[] txBuffer = null;
-						while ((len = bluetoothInStream.read(buffer)) != -1) {
-							txBuffer = new byte[len];
-							for (int i = 0; i < len; i++) {
-								txBuffer[i] = buffer[i];
-							}
-						}
-						connectorMQTT.sendMessage(txBuffer, "mavlink");
+						len = bluetoothInStream.read(buffer);
+						txBuffer = new byte[len];
+						System.arraycopy(buffer, 0, txBuffer, 0, len);
+						connectorMQTT.sendMessage(txBuffer, "mavlink/uav");
 					}
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
