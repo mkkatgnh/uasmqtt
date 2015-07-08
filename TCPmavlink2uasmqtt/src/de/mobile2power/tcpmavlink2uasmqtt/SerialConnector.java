@@ -4,6 +4,8 @@ import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,9 +19,19 @@ public class SerialConnector extends Thread implements SerialPortEventListener {
 	private boolean running = false;
 	OutputStream serialOutputstream = null;
 	InputStream serialInputstream = null;
+	
+	FileOutputStream fop = null;
+	File file;
 
 	public SerialConnector(final int port) throws IOException {
 		this.port = port;
+		file = new File("/tmp/mavlink_uav.bin");
+		fop = new FileOutputStream(file);
+
+		// if file doesnt exists, then create it
+		if (!file.exists()) {
+			file.createNewFile();
+		}	
 	}
 
 	private void handleSocketConnection(Socket client) throws IOException {
@@ -33,6 +45,16 @@ public class SerialConnector extends Thread implements SerialPortEventListener {
 		int len;
 		while ((len = inputstream.read(buffer)) != -1) {
 			outputstream.write(buffer, 0, len);
+		}
+	}
+
+	private void copyStreamToTCP(InputStream inputstream, OutputStream outputstream)
+			throws IOException {
+		byte[] buffer = new byte[1024];
+		int len;
+		while ((len = inputstream.read(buffer)) != -1) {
+			outputstream.write(buffer, 0, len);
+			fop.write(buffer, 0, len);
 		}
 	}
 
@@ -81,7 +103,7 @@ public class SerialConnector extends Thread implements SerialPortEventListener {
 		OutputStream out;
 		try {
 			out = client.getOutputStream();
-			copyStream(serialInputstream, out);
+			copyStreamToTCP(serialInputstream, out);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

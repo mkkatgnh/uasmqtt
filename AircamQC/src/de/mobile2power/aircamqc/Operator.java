@@ -18,6 +18,8 @@ import com.google.gson.Gson;
 
 public class Operator implements MqttCallback {
 
+	private static final byte MAVLINK_START = (byte) 0xFE;
+
 	private long currentTimeMqtt = 0;
 	private long currentTimePreview = 0;
 	private long currentTimeControlQC = 0;
@@ -188,10 +190,12 @@ public class Operator implements MqttCallback {
 		}
 		if (topic.endsWith("event")) {
 			String payload = new String(content.getPayload());
-			Event event = new Event();
-			event = gson.fromJson(payload, Event.class);
-			if ("cam".equals(event.getType())
-					&& "takepicture".equals(event.getAction())) {
+//			
+//			Event event = new Event();
+//			event = gson.fromJson(payload, Event.class);
+//			if ("cam".equals(event.getType())
+//					&& "takepicture".equals(event.getAction())) {
+			if ("{\"cam\":\"takepicture\"}".equals(payload)) {
 				takePicture();
 			}
 		}
@@ -210,12 +214,8 @@ public class Operator implements MqttCallback {
 				try {
 					if (bluetoothInStream != null
 							&& bluetoothInStream.available() > 0) {
-						byte[] buffer = new byte[1024];
-						int len;
 						byte[] txBuffer = null;
-						len = bluetoothInStream.read(buffer);
-						txBuffer = new byte[len];
-						System.arraycopy(buffer, 0, txBuffer, 0, len);
+						txBuffer = copyStream(bluetoothInStream);
 						connectorMQTT.sendMessage(txBuffer, "mavlink/uav");
 					}
 				} catch (IOException e1) {
@@ -232,6 +232,42 @@ public class Operator implements MqttCallback {
 
 		}
 
+	}
+
+	protected byte[] copyStream(InputStream inputstream) throws IOException {
+		byte[] buffer = new byte[9];
+		byte[] txBuffer = null;
+		int len;
+		int payloadLength = 0;
+		len = inputstream.read(buffer, 0, buffer.length);
+		if (len == buffer.length) {
+			int i = 0;
+			// Looking for the start of the mavlink package
+			while ((i < buffer.length) && (buffer[i] != MAVLINK_START)) {
+				i++;
+			}
+			if (i >= buffer.length) {
+				i = 0;
+			}
+			if (buffer.length > (i+1)) {
+				payloadLength = buffer[i + 1] & 0xFF;
+				txBuffer = new byte[payloadLength + 8];
+				// copy start and rest of mavlink package into txBuffer
+				if ((payloadLength + 8) >= len) {
+					System.arraycopy(buffer, i, txBuffer, 0, len - i);
+					// try to read the rest of the mavlink package
+					int secondPayloadPart = (payloadLength + 8) - (len - i);
+					if (secondPayloadPart > 0) {
+						inputstream.read(txBuffer, len - i, secondPayloadPart);
+					}
+				}
+			}
+
+		} else {
+			txBuffer = new byte[len];
+			System.arraycopy(buffer, 0, txBuffer, 0, len);
+		}
+		return txBuffer;
 	}
 
 	public void previewTransmit(boolean checked) {

@@ -64,8 +64,10 @@ public class GateServer {
 					2000);
 			if (commPort instanceof SerialPort) {
 				serialPort = (SerialPort) commPort;
-				serialPort.setSerialPortParams(115200, SerialPort.DATABITS_8,
+				serialPort.setSerialPortParams(57600, SerialPort.DATABITS_8,
 						SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+//				serialPort.setSerialPortParams(115200, SerialPort.DATABITS_8,
+//						SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 			} else {
 				System.out
 						.println("Error: Only serial ports are handled by this example.");

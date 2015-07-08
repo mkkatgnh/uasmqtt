@@ -50,7 +50,10 @@ public class ConnectorMQTT {
 		MqttMessage message = new MqttMessage(payload);
 		message.setQos(qos);
 		try {
-			sampleClient.publish(topicDomain + "/" + clientId + "/" + sensorPart, message);
+			if (sampleClient != null) {
+				sampleClient.publish(topicDomain + "/" + clientId + "/"
+						+ sensorPart, message);
+			}
 		} catch (MqttPersistenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -63,8 +66,9 @@ public class ConnectorMQTT {
 	public void connect() {
 		try {
 			sampleClient.connect(connOpts);
-			int[] subQoS = {0, 0};
-			String[] topics = { topicDomain + "/+/event", topicDomain + "/+/mavlink/gc"};
+			int[] subQoS = { 0, 0 };
+			String[] topics = { topicDomain + "/+/event",
+					topicDomain + "/+/mavlink/gc" };
 			sampleClient.subscribe(topics, subQoS);
 		} catch (MqttSecurityException e) {
 			// TODO Auto-generated catch block
