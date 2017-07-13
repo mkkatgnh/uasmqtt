@@ -1,0 +1,191 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+CONCURRENT_TOUCH	ControlPadActivity.java	/^		final int CONCURRENT_TOUCH = 2;$/;"	f	class:ControlPadActivity.ControlView
+CamPosAndView	CamPosAndView.java	/^public class CamPosAndView {$/;"	c
+ConnectorMQTT	ConnectorMQTT.java	/^public class ConnectorMQTT {$/;"	c
+ControlPadActivity	ControlPadActivity.java	/^public class ControlPadActivity extends Activity  {$/;"	c
+ControlView	ControlPadActivity.java	/^		public ControlView(Context context) {$/;"	m	class:ControlPadActivity.ControlView
+ControlView	ControlPadActivity.java	/^	class ControlView extends SurfaceView implements Runnable {$/;"	c	class:ControlPadActivity
+Event	Event.java	/^public class Event {$/;"	c
+MainActivity	MainActivity.java	/^public class MainActivity extends Activity {$/;"	c
+Operator	Operator.java	/^public class Operator implements MqttCallback {$/;"	c
+PIC_EVENT_NONE	TakePictureState.java	/^	private static final int PIC_EVENT_NONE = 0;$/;"	f	class:TakePictureState	file:
+PIC_EVENT_RELEASE	TakePictureState.java	/^	private static final int PIC_EVENT_RELEASE = 2;$/;"	f	class:TakePictureState	file:
+PIC_EVENT_TRIGGER	TakePictureState.java	/^	private static final int PIC_EVENT_TRIGGER = 1;$/;"	f	class:TakePictureState	file:
+Preview	Preview.java	/^public class Preview implements Serializable {$/;"	c
+PreviewManager	PreviewManager.java	/^public class PreviewManager {$/;"	c
+Sender	Operator.java	/^	class Sender extends Thread {$/;"	c	class:Operator
+TIME_10_FPS	Operator.java	/^	private static final long TIME_10_FPS = 1000 \/ 10; \/\/ 10 per seconds$/;"	f	class:Operator	file:
+TakePictureState	TakePictureState.java	/^public class TakePictureState {$/;"	c
+UavPosition	UavPosition.java	/^public class UavPosition implements Serializable {$/;"	c
+action	Event.java	/^	private String action;$/;"	f	class:Event	file:
+alt	CamPosAndView.java	/^	private double alt;$/;"	f	class:CamPosAndView	file:
+altitude	UavPosition.java	/^	private double altitude;$/;"	f	class:UavPosition	file:
+angh	CamPosAndView.java	/^	private double angh;$/;"	f	class:CamPosAndView	file:
+angv	CamPosAndView.java	/^	private double angv;$/;"	f	class:CamPosAndView	file:
+broker	ConnectorMQTT.java	/^	private String broker = "tcp:\/\/broker.mqtt-dashboard.com:1883";$/;"	f	class:ConnectorMQTT	file:
+btSocket	ControlPadActivity.java	/^	private BluetoothSocket btSocket = null;$/;"	f	class:ControlPadActivity	file:
+clientId	ConnectorMQTT.java	/^	private String clientId = "androidrx";$/;"	f	class:ConnectorMQTT	file:
+communicateTaskCaller	Operator.java	/^	public void communicateTaskCaller(long currentTime) throws IOException {$/;"	m	class:Operator
+connOpts	ConnectorMQTT.java	/^	MqttConnectOptions connOpts;$/;"	f	class:ConnectorMQTT
+connect	ConnectorMQTT.java	/^	public void connect() {$/;"	m	class:ConnectorMQTT
+connectToBroker	Operator.java	/^	public void connectToBroker() {$/;"	m	class:Operator
+connectionEstablished	ConnectorMQTT.java	/^	public boolean connectionEstablished() {$/;"	m	class:ConnectorMQTT
+connectionLost	Operator.java	/^	public void connectionLost(Throwable arg0) {$/;"	m	class:Operator
+connectorMQTT	Operator.java	/^	private ConnectorMQTT connectorMQTT = new ConnectorMQTT();$/;"	f	class:Operator	file:
+currentState	TakePictureState.java	/^	private int currentState = PIC_EVENT_NONE;$/;"	f	class:TakePictureState	file:
+currentTime	Operator.java	/^		private long currentTime;$/;"	f	class:Operator.Sender	file:
+currentTimeMqtt	Operator.java	/^	private long currentTimeMqtt = 0;$/;"	f	class:Operator	file:
+de.mobile2power.aircamqcviewer	CamPosAndView.java	/^package de.mobile2power.aircamqcviewer;$/;"	p
+de.mobile2power.aircamqcviewer	ConnectorMQTT.java	/^package de.mobile2power.aircamqcviewer;$/;"	p
+de.mobile2power.aircamqcviewer	ControlPadActivity.java	/^package de.mobile2power.aircamqcviewer;$/;"	p
+de.mobile2power.aircamqcviewer	Event.java	/^package de.mobile2power.aircamqcviewer;$/;"	p
+de.mobile2power.aircamqcviewer	MainActivity.java	/^package de.mobile2power.aircamqcviewer;$/;"	p
+de.mobile2power.aircamqcviewer	Operator.java	/^package de.mobile2power.aircamqcviewer;$/;"	p
+de.mobile2power.aircamqcviewer	Preview.java	/^package de.mobile2power.aircamqcviewer;$/;"	p
+de.mobile2power.aircamqcviewer	PreviewManager.java	/^package de.mobile2power.aircamqcviewer;$/;"	p
+de.mobile2power.aircamqcviewer	TakePictureState.java	/^package de.mobile2power.aircamqcviewer;$/;"	p
+de.mobile2power.aircamqcviewer	UavPosition.java	/^package de.mobile2power.aircamqcviewer;$/;"	p
+deliveryComplete	Operator.java	/^	public void deliveryComplete(IMqttDeliveryToken arg0) {$/;"	m	class:Operator
+direction	UavPosition.java	/^	private float direction;$/;"	f	class:UavPosition	file:
+disconnect	Operator.java	/^	public void disconnect() {$/;"	m	class:Operator
+draw	PreviewManager.java	/^	public void draw(Canvas canvas, Preview preview) {$/;"	m	class:PreviewManager
+equals	CamPosAndView.java	/^	public boolean equals(Object obj) {$/;"	m	class:CamPosAndView
+equals	Event.java	/^	public boolean equals(Object obj) {$/;"	m	class:Event
+equals	Preview.java	/^	public boolean equals(Object obj) {$/;"	m	class:Preview
+equals	UavPosition.java	/^	public boolean equals(Object obj) {$/;"	m	class:UavPosition
+freeResources	ControlPadActivity.java	/^	private void freeResources() {$/;"	m	class:ControlPadActivity	file:
+getAction	Event.java	/^	public String getAction() {$/;"	m	class:Event
+getAlt	CamPosAndView.java	/^	public double getAlt() {$/;"	m	class:CamPosAndView
+getAltitude	UavPosition.java	/^	public double getAltitude() {$/;"	m	class:UavPosition
+getAngh	CamPosAndView.java	/^	public double getAngh() {$/;"	m	class:CamPosAndView
+getAngv	CamPosAndView.java	/^	public double getAngv() {$/;"	m	class:CamPosAndView
+getDirection	UavPosition.java	/^	public float getDirection() {$/;"	m	class:UavPosition
+getHeight	Preview.java	/^	public int getHeight() {$/;"	m	class:Preview
+getJpegImage	Preview.java	/^	public byte[] getJpegImage() {$/;"	m	class:Preview
+getLat	CamPosAndView.java	/^	public double getLat() {$/;"	m	class:CamPosAndView
+getLatitude	UavPosition.java	/^	public double getLatitude() {$/;"	m	class:UavPosition
+getLon	CamPosAndView.java	/^	public double getLon() {$/;"	m	class:CamPosAndView
+getLongitude	UavPosition.java	/^	public double getLongitude() {$/;"	m	class:UavPosition
+getPit	CamPosAndView.java	/^	public double getPit() {$/;"	m	class:CamPosAndView
+getRol	CamPosAndView.java	/^	public double getRol() {$/;"	m	class:CamPosAndView
+getType	Event.java	/^	public String getType() {$/;"	m	class:Event
+getWidth	Preview.java	/^	public int getWidth() {$/;"	m	class:Preview
+getYaw	CamPosAndView.java	/^	public double getYaw() {$/;"	m	class:CamPosAndView
+gson	Operator.java	/^	private Gson gson = new Gson();$/;"	f	class:Operator	file:
+hashCode	CamPosAndView.java	/^	public int hashCode() {$/;"	m	class:CamPosAndView
+hashCode	Event.java	/^	public int hashCode() {$/;"	m	class:Event
+hashCode	Preview.java	/^	public int hashCode() {$/;"	m	class:Preview
+hashCode	UavPosition.java	/^	public int hashCode() {$/;"	m	class:UavPosition
+height	Preview.java	/^	private int height = 0;$/;"	f	class:Preview	file:
+height	PreviewManager.java	/^	private int height = 144 * 2;$/;"	f	class:PreviewManager	file:
+initGUIElements	MainActivity.java	/^	private void initGUIElements() {$/;"	m	class:MainActivity	file:
+isNone	TakePictureState.java	/^	public boolean isNone() {$/;"	m	class:TakePictureState
+isRelease	TakePictureState.java	/^	public boolean isRelease() {$/;"	m	class:TakePictureState
+isTouch	ControlPadActivity.java	/^		boolean[] isTouch = new boolean[CONCURRENT_TOUCH];$/;"	f	class:ControlPadActivity.ControlView
+isTouch_last	ControlPadActivity.java	/^		boolean[] isTouch_last = new boolean[CONCURRENT_TOUCH];$/;"	f	class:ControlPadActivity.ControlView
+isTrigger	TakePictureState.java	/^	public boolean isTrigger() {$/;"	m	class:TakePictureState
+isWithin	PreviewManager.java	/^	public boolean isWithin(float x, float y, float border) {$/;"	m	class:PreviewManager
+isWithinPreviewButNotWithinPads	ControlPadActivity.java	/^		private boolean isWithinPreviewButNotWithinPads(int id) {$/;"	m	class:ControlPadActivity.ControlView	file:
+jpegImage	Preview.java	/^	private byte[] jpegImage = {};$/;"	f	class:Preview	file:
+lat	CamPosAndView.java	/^	private double lat;$/;"	f	class:CamPosAndView	file:
+latitude	UavPosition.java	/^	private double latitude;$/;"	f	class:UavPosition	file:
+lon	CamPosAndView.java	/^	private double lon;$/;"	f	class:CamPosAndView	file:
+longitude	UavPosition.java	/^	private double longitude;$/;"	f	class:UavPosition	file:
+mPowerManager	ControlPadActivity.java	/^	private PowerManager mPowerManager;$/;"	f	class:ControlPadActivity	file:
+mWakeLock	ControlPadActivity.java	/^	private WakeLock mWakeLock;$/;"	f	class:ControlPadActivity	file:
+messageArrived	Operator.java	/^	public void messageArrived(String topic, MqttMessage message)$/;"	m	class:Operator
+middleX	PreviewManager.java	/^	private int upperLeftX, upperLeftY, middleX;$/;"	f	class:PreviewManager	file:
+mySurfaceView	ControlPadActivity.java	/^	private ControlView mySurfaceView;$/;"	f	class:ControlPadActivity	file:
+next	TakePictureState.java	/^	public void next() {$/;"	m	class:TakePictureState
+onCreate	ControlPadActivity.java	/^	public void onCreate(Bundle savedInstanceState) {$/;"	m	class:ControlPadActivity
+onCreate	MainActivity.java	/^	protected void onCreate(Bundle savedInstanceState) {$/;"	m	class:MainActivity
+onCreateOptionsMenu	MainActivity.java	/^	public boolean onCreateOptionsMenu(Menu menu) {$/;"	m	class:MainActivity
+onDestroy	ControlPadActivity.java	/^		public void onDestroy() {$/;"	m	class:ControlPadActivity.ControlView
+onDestroy	ControlPadActivity.java	/^	public void onDestroy() {$/;"	m	class:ControlPadActivity
+onDestroy	MainActivity.java	/^	protected void onDestroy() {$/;"	m	class:MainActivity
+onOptionsItemSelected	MainActivity.java	/^	public boolean onOptionsItemSelected(MenuItem item) {$/;"	m	class:MainActivity
+onPause	ControlPadActivity.java	/^	protected void onPause() {$/;"	m	class:ControlPadActivity
+onPause	MainActivity.java	/^	protected void onPause() {$/;"	m	class:MainActivity
+onPauseMySurfaceView	ControlPadActivity.java	/^		public void onPauseMySurfaceView() {$/;"	m	class:ControlPadActivity.ControlView
+onResume	ControlPadActivity.java	/^	protected void onResume() {$/;"	m	class:ControlPadActivity
+onResume	MainActivity.java	/^	protected void onResume() {$/;"	m	class:MainActivity
+onResumeMySurfaceView	ControlPadActivity.java	/^		public void onResumeMySurfaceView() {$/;"	m	class:ControlPadActivity.ControlView
+onTouchEvent	ControlPadActivity.java	/^		public boolean onTouchEvent(MotionEvent motionEvent) {$/;"	m	class:ControlPadActivity.ControlView
+operator	ControlPadActivity.java	/^	private Operator operator;$/;"	f	class:ControlPadActivity	file:
+paint	ControlPadActivity.java	/^		private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);$/;"	f	class:ControlPadActivity.ControlView	file:
+parent	Operator.java	/^		private Operator parent = null;$/;"	f	class:Operator.Sender	file:
+parentActivity	ControlPadActivity.java	/^	final Activity parentActivity = this;$/;"	f	class:ControlPadActivity
+persistence	ConnectorMQTT.java	/^	MemoryPersistence persistence = new MemoryPersistence();$/;"	f	class:ConnectorMQTT
+pictureTakeState	ControlPadActivity.java	/^	private TakePictureState pictureTakeState;$/;"	f	class:ControlPadActivity	file:
+pit	CamPosAndView.java	/^	private double pit;$/;"	f	class:CamPosAndView	file:
+preview	ControlPadActivity.java	/^	private Preview preview = null;$/;"	f	class:ControlPadActivity	file:
+previewDTO	Operator.java	/^	private Preview previewDTO = null;$/;"	f	class:Operator	file:
+previewManager	ControlPadActivity.java	/^	private PreviewManager previewManager = new PreviewManager();$/;"	f	class:ControlPadActivity	file:
+qos	ConnectorMQTT.java	/^	private int qos = 0;$/;"	f	class:ConnectorMQTT	file:
+reset	TakePictureState.java	/^	public void reset() {$/;"	m	class:TakePictureState
+rol	CamPosAndView.java	/^	private double rol;$/;"	f	class:CamPosAndView	file:
+run	ControlPadActivity.java	/^		public void run() {$/;"	m	class:ControlPadActivity.ControlView
+run	Operator.java	/^		public void run() {$/;"	m	class:Operator.Sender
+run	Operator.java	/^	public void run() {$/;"	m	class:Operator
+running	ControlPadActivity.java	/^		volatile boolean running = false;$/;"	f	class:ControlPadActivity.ControlView
+sampleClient	ConnectorMQTT.java	/^	private MqttClient sampleClient;$/;"	f	class:ConnectorMQTT	file:
+screenHeight	ControlPadActivity.java	/^	int screenHeight;$/;"	f	class:ControlPadActivity
+screenWidth	ControlPadActivity.java	/^	int screenWidth;$/;"	f	class:ControlPadActivity
+sendMessage	ConnectorMQTT.java	/^	public void sendMessage(byte[] payload, String sensorPart) {$/;"	m	class:ConnectorMQTT
+sender	Operator.java	/^	private Sender sender;$/;"	f	class:Operator	file:
+serialVersionUID	Preview.java	/^	private static final long serialVersionUID = 8807674979651105792L;$/;"	f	class:Preview	file:
+serialVersionUID	UavPosition.java	/^	private static final long serialVersionUID = 4768980831937502880L;$/;"	f	class:UavPosition	file:
+set	PreviewManager.java	/^	public void set(int middleX, int topY) {$/;"	m	class:PreviewManager
+setAction	Event.java	/^	public void setAction(String action) {$/;"	m	class:Event
+setAlt	CamPosAndView.java	/^	public void setAlt(double alt) {$/;"	m	class:CamPosAndView
+setAltitude	UavPosition.java	/^	public void setAltitude(double altitude) {$/;"	m	class:UavPosition
+setAngh	CamPosAndView.java	/^	public void setAngh(double angh) {$/;"	m	class:CamPosAndView
+setAngv	CamPosAndView.java	/^	public void setAngv(double angv) {$/;"	m	class:CamPosAndView
+setDirection	UavPosition.java	/^	public void setDirection(float direction) {$/;"	m	class:UavPosition
+setHeight	Preview.java	/^	public void setHeight(int height) {$/;"	m	class:Preview
+setJpegImage	Preview.java	/^	public void setJpegImage(byte[] jpegImage) {$/;"	m	class:Preview
+setLat	CamPosAndView.java	/^	public void setLat(double lat) {$/;"	m	class:CamPosAndView
+setLatitude	UavPosition.java	/^	public void setLatitude(double latitude) {$/;"	m	class:UavPosition
+setLon	CamPosAndView.java	/^	public void setLon(double lon) {$/;"	m	class:CamPosAndView
+setLongitude	UavPosition.java	/^	public void setLongitude(double longitude) {$/;"	m	class:UavPosition
+setParent	Operator.java	/^		public void setParent(Operator parent) {$/;"	m	class:Operator.Sender
+setPit	CamPosAndView.java	/^	public void setPit(double pit) {$/;"	m	class:CamPosAndView
+setPreview	Operator.java	/^	public void setPreview(Preview preview) {$/;"	m	class:Operator
+setRol	CamPosAndView.java	/^	public void setRol(double rol) {$/;"	m	class:CamPosAndView
+setTakePictureState	Operator.java	/^	public void setTakePictureState(TakePictureState takePictureState) {$/;"	m	class:Operator
+setType	Event.java	/^	public void setType(String type) {$/;"	m	class:Event
+setUavPosition	Operator.java	/^	public void setUavPosition(UavPosition uavPosition) {$/;"	m	class:Operator
+setWidth	Preview.java	/^	public void setWidth(int width) {$/;"	m	class:Preview
+setYaw	CamPosAndView.java	/^	public void setYaw(double yaw) {$/;"	m	class:CamPosAndView
+setup	Operator.java	/^	public void setup(String brokerUrl) {$/;"	m	class:Operator
+setupConnection	ConnectorMQTT.java	/^	public void setupConnection(String brokerUrl, MqttCallback callback) {$/;"	m	class:ConnectorMQTT
+showAltitude	ControlPadActivity.java	/^		public void showAltitude(Canvas canvas, UavPosition uavPosition) {$/;"	m	class:ControlPadActivity.ControlView
+surfaceHolder	ControlPadActivity.java	/^		SurfaceHolder surfaceHolder;$/;"	f	class:ControlPadActivity.ControlView
+takePictureEventData	ControlPadActivity.java	/^	byte[] takePictureEventData;$/;"	f	class:ControlPadActivity
+takePictureState	Operator.java	/^	private TakePictureState takePictureState = null;$/;"	f	class:Operator	file:
+teardownConnection	ConnectorMQTT.java	/^	public void teardownConnection() {$/;"	m	class:ConnectorMQTT
+thread	ControlPadActivity.java	/^		Thread thread = null;$/;"	f	class:ControlPadActivity.ControlView
+toString	Preview.java	/^	public String toString() {$/;"	m	class:Preview
+toString	TakePictureState.java	/^	public String toString() {$/;"	m	class:TakePictureState
+toString	UavPosition.java	/^	public String toString() {$/;"	m	class:UavPosition
+topic	ConnectorMQTT.java	/^	private String topic = "uascon";$/;"	f	class:ConnectorMQTT	file:
+touched	ControlPadActivity.java	/^		volatile boolean touched = false;$/;"	f	class:ControlPadActivity.ControlView
+touched_x	ControlPadActivity.java	/^		volatile float touched_x, touched_y;$/;"	f	class:ControlPadActivity.ControlView
+touched_y	ControlPadActivity.java	/^		volatile float touched_x, touched_y;$/;"	f	class:ControlPadActivity.ControlView
+type	Event.java	/^	private String type;$/;"	f	class:Event	file:
+uavPosition	ControlPadActivity.java	/^	private UavPosition uavPosition = new UavPosition();$/;"	f	class:ControlPadActivity	file:
+uavPosition	Operator.java	/^	private UavPosition uavPosition;$/;"	f	class:Operator	file:
+upperLeftX	PreviewManager.java	/^	private int upperLeftX, upperLeftY, middleX;$/;"	f	class:PreviewManager	file:
+upperLeftY	PreviewManager.java	/^	private int upperLeftX, upperLeftY, middleX;$/;"	f	class:PreviewManager	file:
+width	Preview.java	/^	private int width = 0;$/;"	f	class:Preview	file:
+width	PreviewManager.java	/^	private int width = 178 * 2;$/;"	f	class:PreviewManager	file:
+x	ControlPadActivity.java	/^		float[] x = new float[CONCURRENT_TOUCH];$/;"	f	class:ControlPadActivity.ControlView
+x_last	ControlPadActivity.java	/^		float[] x_last = new float[CONCURRENT_TOUCH];$/;"	f	class:ControlPadActivity.ControlView
+y	ControlPadActivity.java	/^		float[] y = new float[CONCURRENT_TOUCH];$/;"	f	class:ControlPadActivity.ControlView
+y_last	ControlPadActivity.java	/^		float[] y_last = new float[CONCURRENT_TOUCH];$/;"	f	class:ControlPadActivity.ControlView
+yaw	CamPosAndView.java	/^	private double yaw;$/;"	f	class:CamPosAndView	file:

@@ -1,4 +1,20 @@
 import de.fhpotsdam.unfolding.*;
+import de.fhpotsdam.unfolding.core.*;
+import de.fhpotsdam.unfolding.data.*;
+import de.fhpotsdam.unfolding.events.*;
+import de.fhpotsdam.unfolding.geo.*;
+import de.fhpotsdam.unfolding.interactions.*;
+import de.fhpotsdam.unfolding.mapdisplay.*;
+import de.fhpotsdam.unfolding.mapdisplay.shaders.*;
+import de.fhpotsdam.unfolding.marker.*;
+import de.fhpotsdam.unfolding.providers.*;
+import de.fhpotsdam.unfolding.texture.*;
+import de.fhpotsdam.unfolding.tiles.*;
+import de.fhpotsdam.unfolding.ui.*;
+import de.fhpotsdam.unfolding.utils.*;
+import de.fhpotsdam.utils.*;
+
+import de.fhpotsdam.unfolding.*;
 import de.fhpotsdam.unfolding.geo.*;
 import de.fhpotsdam.unfolding.utils.*;
 import de.fhpotsdam.unfolding.providers.*;
@@ -15,7 +31,7 @@ import java.net.*;
 UnfoldingMap map;
 Qatja client;
 Gson gson;
-final static String MQTT_BROKER_IP = "127.0.0.1";
+final static String MQTT_BROKER_IP = "broker.mqtt-dashboard.com"; //"127.0.0.1";
 String hostId;
 
 CamPosAndView uasPos;
@@ -61,7 +77,7 @@ void keyPressed() {
     client.publishAtLeastOnce("uascon/"+hostId+"/event", "{\"cam\":\"takepicture\"}");
     picturePositions.add(uasPos);
   } else if (key == 'm' || key == 'M') {
-    map.zoomAndPanTo(currentLocation, 17);
+    //map.zoomAndPanTo(currentLocation, 17);
   }
 }
 
@@ -133,4 +149,3 @@ ImageSize calculateImageGroundSize(double angleHorizontal, double angleVertical,
   size.setHeight((cornerPos.y - posScreen.y)*2);
   return size;
 }
-
