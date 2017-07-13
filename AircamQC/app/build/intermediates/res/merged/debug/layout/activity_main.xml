@@ -1,0 +1,125 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        tools:ignore="UselessParent" >
+
+        <TableLayout
+            android:id="@+id/tableLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:shrinkColumns="*"
+            android:stretchColumns="*" >
+
+            <TableRow
+                android:id="@+id/tableRowConnectBrokerTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left" >
+
+                <Button
+                    android:id="@+id/connectMQTTBrokerButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/connect_mqtt_broker_button"
+                    tools:ignore="ButtonStyle" />
+
+                <Button
+                    android:id="@+id/disconnectMQTTBrokerButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/disconnect_mqtt_broker_button"
+                    tools:ignore="ButtonStyle" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRowsetAltitudeLevelToZeroTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left" >
+
+                <TextView
+                    android:id="@+id/setAltitudeLevelToZeroLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/set_altitude_level_to_zero_label" />
+
+                <Button
+                    android:id="@+id/setAltitudeLevelToZeroButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/set_altitude_level_to_zero_button" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRowsetTransmitPreview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left" >
+
+                <TextView
+                    android:id="@+id/setTransmitPreviewLable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/transmit_preview" />
+
+                <CheckBox
+                    android:id="@+id/setTransmitPreviewCheckBox"
+                    android:layout_width="wrap_content" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/bluetoothDevicelistTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bluetooth_device" />
+
+                <Spinner
+                    android:id="@+id/bluetoothSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRowConnectBluetoothDeviceTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left" >
+
+                <Button
+                    android:id="@+id/connectBluetoothDeviceButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/connect_bluetooth_device_button"
+                    tools:ignore="ButtonStyle" />
+                <Button
+                    android:id="@+id/shareControlUrlButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/shareControlUrl"
+                    tools:ignore="ButtonStyle" />
+            </TableRow>
+        </TableLayout>
+
+        <FrameLayout
+            android:id="@+id/preview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_span="3"
+            android:layout_weight="1"
+            tools:ignore="ObsoleteLayoutParam,InefficientWeight" >
+        </FrameLayout>
+    </LinearLayout>
+
+</RelativeLayout>
